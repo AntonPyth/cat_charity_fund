@@ -10,7 +10,6 @@ async def check_project_name_duplicate(
     name: str,
     session: AsyncSession
 ) -> None:
-    """Raise HTTP 400 if a project with the given name already exists."""
     project_id = await charity_project_crud.get_project_id_by_name(
         name, session
     )
@@ -25,9 +24,6 @@ async def check_project_exists(
     project_id: int,
     session: AsyncSession
 ) -> CharityProject:
-    """
-    Return project or raise HTTP 404 if not found.
-    """
     project = await charity_project_crud.get(project_id, session)
     if project is None:
         raise HTTPException(
@@ -41,9 +37,6 @@ async def check_project_closed_or_invested(
     project_id: int,
     session: AsyncSession
 ) -> None:
-    """
-    Raise HTTP 400 if project is closed or has investments.
-    """
     project = await charity_project_crud.get(project_id, session)
     if not project:
         raise HTTPException(
@@ -56,7 +49,7 @@ async def check_project_closed_or_invested(
     ):
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='В проект были внесены средства, не подлежит удалению!'
+            detail='В проект уже были внесены средства, нельзя удалить!'
         )
 
 
@@ -65,9 +58,6 @@ async def check_project_before_edit(
     project_id: int,
     session: AsyncSession
 ) -> None:
-    """
-    Raise HTTP 400 if project is closed or full_amount is less than invested.
-    """
     project = await charity_project_crud.get(project_id, session)
     if not project:
         raise HTTPException(
@@ -83,7 +73,7 @@ async def check_project_before_edit(
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail=(
-                'Нелья установить значение full_amount '
-                'меньше уже вложенной суммы.'
+                'Нельзя установить значение full_amount '
+                'меньше ранее вложенной суммы.'
             )
         )

@@ -27,7 +27,6 @@ router = APIRouter()
 async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session),
 ) -> list[CharityProjectDB]:
-    """Get all charity projects."""
     return await charity_project_crud.get_multi(session)
 
 
@@ -40,7 +39,6 @@ async def remove_charity_project(
     project_id: int,
     session: AsyncSession = Depends(get_async_session),
 ) -> CharityProjectDB:
-    """Delete a charity project (superusers only)."""
     project = await check_project_exists(project_id, session)
     await check_project_closed_or_invested(project_id, session)
     return await charity_project_crud.remove(project, session)
@@ -55,7 +53,6 @@ async def create_new_charity_project(
     project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session),
 ) -> CharityProjectDB:
-    """Create a new charity project (superusers only)."""
     await check_project_name_duplicate(project.name, session)
     new_project = await charity_project_crud.create(project, session)
     return await investment_process(new_project, session)
@@ -71,7 +68,6 @@ async def partially_update_charity_project(
     obj_in: CharityProjectUpdate,
     session: AsyncSession = Depends(get_async_session),
 ) -> CharityProjectDB:
-    """Update a charity project (superusers only)."""
     project = await check_project_exists(project_id, session)
     if obj_in.name is not None:
         await check_project_name_duplicate(obj_in.name, session)

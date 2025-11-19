@@ -25,9 +25,6 @@ router = APIRouter()
 async def get_all_donations(
     session: AsyncSession = Depends(get_async_session),
 ):
-    """
-    Get all donations (superuser only).
-    """
     return await donation_crud.get_multi(session)
 
 
@@ -40,9 +37,6 @@ async def create_new_donation(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    """
-    Create a new donation for the current user.
-    """
     new_donation = await donation_crud.create(donation, session, user)
     return await investment_process(new_donation, session)
 
@@ -55,7 +49,4 @@ async def get_user_donations(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_user),
 ):
-    """
-    Get all donations for the current user.
-    """
     return await donation_crud.get_by_user(user, session)

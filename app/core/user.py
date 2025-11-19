@@ -42,11 +42,11 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     ) -> None:
         if len(password) < MIN_PASSWORD_LENGTH:
             raise InvalidPasswordException(
-                reason='Password should be at least 3 characters'
+                reason='Пароль должен содержать не менее 3 символов'
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Password should not contain e-mail'
+                reason='Пароль не должен содержать адрес e-mail'
             )
 
     async def on_after_register(
