@@ -10,7 +10,7 @@ from fastapi_users.authentication import (
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.config import logger, MIN_PASSWORD_LENGTH, settings
+from app.core.config import logger, MIN_PASS_LEN, settings
 from app.core.db import get_async_session
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -40,7 +40,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         password: str,
         user: Union[UserCreate, User],
     ) -> None:
-        if len(password) < MIN_PASSWORD_LENGTH:
+        if len(password) < MIN_PASS_LEN:
             raise InvalidPasswordException(
                 reason='Пароль должен содержать не менее 3 символов'
             )

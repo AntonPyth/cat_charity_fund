@@ -3,7 +3,7 @@ import sys
 from pydantic import BaseSettings, EmailStr
 from typing import Optional
 
-MIN_PASSWORD_LENGTH = 3
+MIN_PASS_LEN = 3
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
