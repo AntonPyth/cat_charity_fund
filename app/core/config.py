@@ -1,7 +1,8 @@
 import logging
 import sys
-from pydantic import BaseSettings, EmailStr
 from typing import Optional
+
+from pydantic import BaseSettings, EmailStr
 
 MIN_PASS_LEN = 3
 
