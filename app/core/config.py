@@ -20,12 +20,13 @@ class Settings(BaseSettings):
     app_title: str = 'Благотворительный фонд'
     app_description: str = 'Поддержка котиков'
     database_url: str = 'sqlite+aiosqlite:///./cat_charity_fund.db'
-    secret: str = 'SECRET'
+    secret: str = 'CHANGE_ME'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
 
     class Config:
         env_file = '.env'
+        env_prefix = 'CAT_'
 
 
 settings = Settings()

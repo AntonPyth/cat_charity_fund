@@ -107,3 +107,14 @@ uvicorn app.main:app
 
 ## 👤 Автор
 [Кочуев Антон]  (https://github.com/AntonPyth)
+ 
+## Environment variables
+
+- **Namespacing:** this project prefixes environment variables with `CAT_` to avoid collisions with other services. For example `CAT_DATABASE_URL` and `CAT_SECRET`.
+- **Usage:** copy `.env.example` to `.env` and fill in real values for local development. `.env` is ignored by git.
+
+Example (create `.env` from `.env.example` on Unix-like shells):
+```bash
+cp .env.example .env
+# then edit .env and restart the app
+```
