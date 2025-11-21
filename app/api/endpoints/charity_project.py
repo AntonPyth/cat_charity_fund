@@ -22,6 +22,7 @@ router = APIRouter()
 @router.get(
     '/',
     response_model=list[CharityProjectDB],
+    summary='Запрашивает список всех благотворительных проектов',
 )
 async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session),
@@ -33,6 +34,7 @@ async def get_all_charity_projects(
     '/{project_id}',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
+    summary='Удалить благотворительный проект',
 )
 async def remove_charity_project(
     project_id: int,
@@ -47,6 +49,7 @@ async def remove_charity_project(
     '/',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
+    summary='Создать новый благотворительный проект',
 )
 async def create_new_charity_project(
     project: CharityProjectCreate,
@@ -61,6 +64,7 @@ async def create_new_charity_project(
     '/{project_id}',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
+    summary='Внести изменения в благотворительный проект',
 )
 async def partially_update_charity_project(
     project_id: int,
