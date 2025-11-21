@@ -1,10 +1,9 @@
 from .charity_project import CharityProject
 from .donation import Donation
+from .user import User
 
 CharityProject.investment_counterpart = Donation
 Donation.investment_counterpart = CharityProject
-from .user import User
-
 
 __all__ = [
     'CharityProject',
