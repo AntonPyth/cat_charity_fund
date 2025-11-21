@@ -28,12 +28,12 @@ class CRUDBase:
         session: AsyncSession,
         user: Optional[User] = None,
     ) -> Any:
-        if hasattr(obj_in, "dict"):
+        if hasattr(obj_in, 'dict'):
             payload: Dict[str, Any] = obj_in.dict()
         else:
             payload = dict(obj_in)
         if user is not None:
-            payload["user_id"] = user.id
+            payload['user_id'] = user.id
         instance = self.model(**payload)
         session.add(instance)
         await session.commit()
@@ -47,7 +47,7 @@ class CRUDBase:
         session: AsyncSession,
     ) -> Any:
         current_data = jsonable_encoder(db_obj)
-        if hasattr(obj_in, "dict"):
+        if hasattr(obj_in, 'dict'):
             update_data = obj_in.dict(exclude_unset=True)
         else:
             update_data = dict(obj_in)

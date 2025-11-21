@@ -13,7 +13,7 @@ from app.core.db import Base
 sys.path.insert(
     0,
     os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..")
+        os.path.join(os.path.dirname(__file__), '..')
     )
 )
 
@@ -23,14 +23,14 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-sync_url = settings.database_url.replace("+aiosqlite", "")
-config.set_main_option("sqlalchemy.url", sync_url)
+sync_url = settings.database_url.replace('+aiosqlite', '')
+config.set_main_option('sqlalchemy.url', sync_url)
 
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
-    url = config.get_main_option("sqlalchemy.url")
+    url = config.get_main_option('sqlalchemy.url')
     context.configure(
         url=url, target_metadata=target_metadata, literal_binds=True
     )
@@ -41,7 +41,7 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
+        prefix='sqlalchemy.',
         poolclass=pool.NullPool,
     )
 

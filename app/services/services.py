@@ -10,6 +10,10 @@ async def closing_project(
         project: CharityProject,
         session: AsyncSession
 ):
+    """
+    Помечает проект как полностью инвестированный
+    и устанавливает дату окончания приема инвестиций
+    """
     if project.full_amount == project.invested_amount:
         project.fully_invested = True
         project.close_date = datetime.now()
@@ -21,6 +25,9 @@ async def closing_project(
 async def closing_single_investment(
         object,
         session: AsyncSession):
+    """
+    Помечает один взнос как полностью инвестированный.
+    """
     object.invested_amount = object.full_amount
     object.fully_invested = True
     object.close_date = datetime.now()
@@ -31,7 +38,11 @@ async def investment_process(
         model_object,
         session: AsyncSession
 ):
-    if type(model_object) is Donation:
+    """
+    Процесс распределения инвестиций между пожертвованиями и
+    благотворительными проектами.
+    """
+    if isinstance(model_object, Donation):
         free_objects_model = CharityProject
     else:
         free_objects_model = Donation

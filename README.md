@@ -34,7 +34,7 @@ cat_charity_fund:
        ├── crud
             ├── __init__.py
             ├── base.py
-            ├── charityproject.py
+            ├── charity_project.py
             ├── donation.py
        ├── models
             ├── __init__.py
@@ -43,7 +43,7 @@ cat_charity_fund:
             ├── user.py
        ├── schemas
             ├── __init__.py
-            ├── charityproject.py
+            ├── charity_project.py
             ├── donation.py
             ├── user.py
        ├── services

@@ -16,7 +16,7 @@ get_user_manager_context = (
 )
 
 
-__all__ = ["create_user", "create_first_superuser"]
+__all__ = ['create_user', 'create_first_superuser']
 
 
 async def create_user(
@@ -34,15 +34,15 @@ async def create_user(
                         )
                     )
 
-        logger.info("Created user %s", email)
+        logger.info('Created user %s', email)
         return True
 
     except UserAlreadyExists:
-        logger.info("User %s already exists", email)
+        logger.info('User %s already exists', email)
         return False
 
     except Exception:
-        logger.exception("Failed to create user %s", email)
+        logger.exception('Failed to create user %s', email)
         return False
 
 
@@ -51,12 +51,12 @@ async def create_first_superuser() -> None:
     password: Optional[str] = settings.first_superuser_password
 
     if not (email and password):
-        logger.debug("No initial superuser configured; skipping creation")
+        logger.debug('No initial superuser configured; skipping creation')
         return
 
     created = await create_user(email=email, password=password,
                                 is_superuser=True)
     if created:
-        logger.info("Initial superuser %s created", email)
+        logger.info('Initial superuser %s created', email)
     else:
-        logger.info("Initial superuser %s already present", email)
+        logger.info('Initial superuser %s already present', email)
