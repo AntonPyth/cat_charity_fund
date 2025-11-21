@@ -43,32 +43,42 @@ async def investment_process(
     благотворительными проектами.
     """
     free_objects_model = model_object.investment_counterpart
-    free_objects = await session.execute(
-        select(free_objects_model).where(
-            ~free_objects_model.fully_invested
-        ).order_by(free_objects_model.create_date)
+
+    result = await session.execute(
+        select(free_objects_model)
+        .where(~free_objects_model.fully_invested)
+        .order_by(free_objects_model.create_date)
     )
-    if free_objects:
-        for free_object in free_objects.scalars().all():
-            if (
-                (free_object.full_amount - free_object.invested_amount
-                 ) < (model_object.full_amount - model_object.invested_amount)
-            ):
-                model_object.invested_amount += ((free_object.full_amount -
-                                                  free_object.invested_amount))
-                await closing_single_investment(free_object, session)
-                continue
-            if (
-                (free_object.full_amount - free_object.invested_amount
-                 ) == (model_object.full_amount - model_object.invested_amount)
-            ):
-                await closing_single_investment(model_object, session)
-                await closing_single_investment(free_object, session)
-                break
-            free_object.invested_amount += ((model_object.full_amount -
-                                             model_object.invested_amount))
-            await closing_single_investment(model_object, session)
-            break
-        await session.commit()
-        await session.refresh(model_object)
+
+    free_objects = result.scalars().all()
+
+    # --- GUARD CLAUSE: нет свободных объектов ---
+    if not free_objects:
         return model_object
+
+    model_remaining = model_object.full_amount - model_object.invested_amount
+
+    for free_object in free_objects:
+        free_remaining = free_object.full_amount - free_object.invested_amount
+
+        # free < model → вложили объект полностью
+        if free_remaining < model_remaining:
+            model_object.invested_amount += free_remaining
+            await closing_single_investment(free_object, session)
+            model_remaining -= free_remaining
+            continue
+
+        # free == model → оба закрываются
+        if free_remaining == model_remaining:
+            await closing_single_investment(model_object, session)
+            await closing_single_investment(free_object, session)
+            break
+
+        # free > model → закрывается model_object
+        free_object.invested_amount += model_remaining
+        await closing_single_investment(model_object, session)
+        break
+
+    await session.commit()
+    await session.refresh(model_object)
+    return model_object
