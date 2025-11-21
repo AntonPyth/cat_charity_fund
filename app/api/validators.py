@@ -12,6 +12,10 @@ async def check_project_name_duplicate(
     name: str,
     session: AsyncSession
 ) -> None:
+    """
+    Проверка на дублирование имени благотворительного проекта.
+    """
+
     project_id = await charity_project_crud.get_project_id_by_name(
         name, session
     )
@@ -26,12 +30,12 @@ async def check_project_exists(
     project_id: int,
     session: AsyncSession
 ) -> CharityProject:
+    """
+    Проверка существования благотворительного проекта.
+    """
     project = await charity_project_crud.get(project_id, session)
     if project is None:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Проект не найден!'
-        )
+        raise 
     return project
 
 
@@ -39,6 +43,9 @@ async def check_project_closed_or_invested(
     project_id: int,
     session: AsyncSession
 ) -> None:
+    """
+    Проверка, не закрыт ли проект и не получены ли уже инвестиции.
+    """
     project = await charity_project_crud.get(project_id, session)
     if not project:
         raise HTTPException(
@@ -60,6 +67,9 @@ async def check_project_before_edit(
     project_id: int,
     session: AsyncSession
 ) -> None:
+    """
+    Проверка возможности редактирования проекта.
+    """
     project = await charity_project_crud.get(project_id, session)
     if not project:
         raise HTTPException(
