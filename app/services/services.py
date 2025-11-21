@@ -42,10 +42,7 @@ async def investment_process(
     Процесс распределения инвестиций между пожертвованиями и
     благотворительными проектами.
     """
-    if isinstance(model_object, Donation):
-        free_objects_model = CharityProject
-    else:
-        free_objects_model = Donation
+    free_objects_model = model_object.investment_counterpart
     free_objects = await session.execute(
         select(free_objects_model).where(
             ~free_objects_model.fully_invested

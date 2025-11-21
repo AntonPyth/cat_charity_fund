@@ -21,5 +21,6 @@ class DonationsBase(Base):
 
 
 class Donation(DonationsBase):
+    investment_counterpart = None
     user_id = Column(Integer, ForeignKey('user.id'))
     comment = Column(Text)
