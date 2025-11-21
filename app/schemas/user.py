@@ -2,12 +2,18 @@ from fastapi_users import schemas
 
 
 class UserRead(schemas.BaseUser[int]):
-    pass
+    """
+    Возвращается при чтении общедоступных данных пользователя.
+    """
 
 
 class UserCreate(schemas.BaseUserCreate):
-    pass
+    """
+    Схема используется при создании нового пользователя.
+    """
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    pass
+    """
+    Схема, используется для акцепта частичных обновлений пользовательских данных
+    """

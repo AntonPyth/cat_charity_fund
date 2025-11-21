@@ -4,4 +4,8 @@ from app.core.db import Base
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):
-    pass
+    """
+    модель пользователя, которая комбинирует
+    собственную ORM-модель (Base) 
+    с базовым шаблоном пользователя из FastAPI Users
+    """
