@@ -26,7 +26,8 @@ async def closing_project(
 
 async def closing_single_investment(
         investment: Union[CharityProject, Donation],
-        session: AsyncSession):
+        session: AsyncSession
+):
     """
     Помечает один взнос как полностью инвестированный.
     """
