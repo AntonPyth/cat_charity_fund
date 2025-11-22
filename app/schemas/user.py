@@ -15,6 +15,6 @@ class UserCreate(schemas.BaseUserCreate):
 
 class UserUpdate(schemas.BaseUserUpdate):
     """
-    Схема, используется для акцепта частичных обновлений 
+    Схема, используется для акцепта частичных обновлений
     пользовательских данных
     """
