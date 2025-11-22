@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import CharityProject
+from app.models import CharityProject, Donation
 
 
 async def closing_project(
@@ -23,15 +23,15 @@ async def closing_project(
 
 
 async def closing_single_investment(
-        object,
+        investment,
         session: AsyncSession):
     """
     Помечает один взнос как полностью инвестированный.
     """
-    object.invested_amount = object.full_amount
-    object.fully_invested = True
-    object.close_date = datetime.now()
-    session.refresh(object)
+    investment.invested_amount = investment.full_amount
+    investment.fully_invested = True
+    investment.close_date = datetime.now()
+    session.refresh(investment)
 
 
 async def investment_process(
@@ -42,7 +42,12 @@ async def investment_process(
     Процесс распределения инвестиций между пожертвованиями и
     благотворительными проектами.
     """
-    free_objects_model = model_object.investment_counterpart
+    if isinstance(model_object, CharityProject):
+        free_objects_model = Donation
+    elif isinstance(model_object, Donation):
+        free_objects_model = CharityProject
+    else:
+        raise ValueError("Некорректный тип объекта модели")
 
     result = await session.execute(
         select(free_objects_model)
@@ -52,7 +57,6 @@ async def investment_process(
 
     free_objects = result.scalars().all()
 
-    # --- GUARD CLAUSE: нет свободных объектов ---
     if not free_objects:
         return model_object
 
@@ -61,20 +65,17 @@ async def investment_process(
     for free_object in free_objects:
         free_remaining = free_object.full_amount - free_object.invested_amount
 
-        # free < model → вложили объект полностью
         if free_remaining < model_remaining:
             model_object.invested_amount += free_remaining
             await closing_single_investment(free_object, session)
             model_remaining -= free_remaining
             continue
 
-        # free == model → оба закрываются
         if free_remaining == model_remaining:
             await closing_single_investment(model_object, session)
             await closing_single_investment(free_object, session)
             break
 
-        # free > model → закрывается model_object
         free_object.invested_amount += model_remaining
         await closing_single_investment(model_object, session)
         break

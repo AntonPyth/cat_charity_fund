@@ -133,3 +133,9 @@ dmypy.json
 
 .vscode
 openapi.json
+test.db
+fast_api.db
+fastapi.db
+test.db-journal
+cat_charity_fund.db
+cat_charity_fund.db-journal
