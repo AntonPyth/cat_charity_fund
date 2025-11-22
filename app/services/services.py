@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from typing import Union
+
 from app.models import CharityProject, Donation
 
 
@@ -23,7 +25,7 @@ async def closing_project(
 
 
 async def closing_single_investment(
-        investment,
+        investment: Union[CharityProject, Donation],
         session: AsyncSession):
     """
     Помечает один взнос как полностью инвестированный.
