@@ -1,17 +1,20 @@
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import (check_project_before_edit,
-                                check_project_closed_or_invested,
-                                check_project_exists,
-                                check_project_name_duplicate)
+from app.api.validators import (
+    check_project_before_edit,
+    check_project_closed_or_invested,
+    check_project_exists,
+    check_project_name_duplicate,
+)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
-from app.schemas.charity_project import (CharityProjectCreate,
-                                         CharityProjectDB,
-                                         CharityProjectUpdate)
+from app.schemas.charity_project import (
+    CharityProjectCreate,
+    CharityProjectDB,
+    CharityProjectUpdate,
+)
 from app.services.services import closing_project, investment_process
 
 router = APIRouter()
@@ -74,7 +77,8 @@ async def partially_update_charity_project(
         await check_project_name_duplicate(obj_in.name, session)
     if obj_in.full_amount is not None:
         await check_project_before_edit(
-            obj_in.full_amount, project_id, session
+            obj_in.full_amount,
+            project_id, session
         )
     project = await charity_project_crud.update(project, obj_in, session)
     return await closing_project(project, session)

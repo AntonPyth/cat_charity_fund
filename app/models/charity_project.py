@@ -10,5 +10,6 @@ class CharityProject(DonationsBase):
         name: Уникальное имя проекта (максимум 100 символов).
         description: Описание проекта.
     """
+
     name = Column(String(100), unique=True, nullable=False)
     description = Column(Text, nullable=False)

@@ -12,8 +12,9 @@ class CRUDDonation(CRUDBase):
             user: User,
             session: AsyncSession
     ) -> list[Donation]:
-        all_user_donations = select(Donation).where(
-            Donation.user_id == user.id
+        all_user_donations = (
+            select(Donation)
+            .where(Donation.user_id == user.id)
         )
         donations = await session.execute(all_user_donations)
         donations = donations.scalars().all()

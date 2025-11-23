@@ -12,6 +12,7 @@ anyio==3.6.1
 asgiref==3.5.2
 attrs==21.4.0
 bcrypt==3.2.2
+black==25.11.0
 certifi==2022.5.18.1
 cffi==1.15.0
 charset-normalizer==2.0.12
@@ -24,6 +25,7 @@ fastapi-users-db-sqlalchemy==4.0.3
 fastapi-users[sqlalchemy]==10.0.4
 fastapi==0.78.0
 flake8==4.0.1
+flake8-docstrings==1.7.0
 freezegun==1.2.1
 greenlet==1.1.2
 h11==0.13.0

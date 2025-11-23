@@ -1,10 +1,17 @@
 from typing import Optional, Union
 
 from fastapi import Depends, Request
-from fastapi_users import (BaseUserManager, FastAPIUsers, IntegerIDMixin,
-                           InvalidPasswordException)
-from fastapi_users.authentication import (AuthenticationBackend,
-                                          BearerTransport, JWTStrategy)
+from fastapi_users import (
+    BaseUserManager,
+    FastAPIUsers,
+    IntegerIDMixin,
+    InvalidPasswordException,
+)
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    BearerTransport,
+    JWTStrategy,
+)
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,6 +23,7 @@ from app.schemas.user import UserCreate
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
+
 
 bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
@@ -48,7 +56,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             )
 
     async def on_after_register(
-            self, user: User, request: Optional[Request] = None
+            self,
+            user: User,
+            request: Optional[Request] = None
     ):
         success_reg_message = f'Пользователь {user.email} зарегистрирован.'
         logger.info(success_reg_message)

@@ -11,9 +11,7 @@ from app.schemas.user import UserCreate
 
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
 get_user_db_context = contextlib.asynccontextmanager(get_user_db)
-get_user_manager_context = (
-    contextlib.asynccontextmanager(get_user_manager)
-)
+get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
 
 
 __all__ = ['create_user', 'create_first_superuser']
@@ -51,11 +49,14 @@ async def create_first_superuser() -> None:
     password: Optional[str] = settings.first_superuser_password
 
     if not (email and password):
-        logger.debug('No initial superuser configured; skipping creation')
+        logger.debug('Суперпользователь не задан в переменных окружения')
         return
 
-    created = await create_user(email=email, password=password,
-                                is_superuser=True)
+    created = await create_user(
+        email=email,
+        password=password,
+        is_superuser=True
+    )
     if created:
         logger.info('Initial superuser %s created', email)
     else:

@@ -7,14 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import CharityProject, Donation
 
 
-async def closing_project(
-        project: CharityProject,
-        session: AsyncSession
-):
-    """
-    Помечает проект как полностью инвестированный
-    и устанавливает дату окончания приема инвестиций
-    """
+async def closing_project(project: CharityProject, session: AsyncSession):
+    """Отмечает проект полностью заполненным."""
     if project.full_amount == project.invested_amount:
         project.fully_invested = True
         project.close_date = datetime.now()
@@ -24,26 +18,17 @@ async def closing_project(
 
 
 async def closing_single_investment(
-        investment: Union[CharityProject, Donation],
-        session: AsyncSession
+    investment: Union[CharityProject, Donation], session: AsyncSession
 ):
-    """
-    Помечает один взнос как полностью инвестированный.
-    """
+    """Помечает взнос как полностью инвестированный."""
     investment.invested_amount = investment.full_amount
     investment.fully_invested = True
     investment.close_date = datetime.now()
     session.refresh(investment)
 
 
-async def investment_process(
-        model_object,
-        session: AsyncSession
-):
-    """
-    Процесс распределения инвестиций между пожертвованиями и
-    благотворительными проектами.
-    """
+async def investment_process(model_object, session: AsyncSession):
+    """Распределяет инвестиции между проектами."""
     if isinstance(model_object, CharityProject):
         free_objects_model = Donation
     elif isinstance(model_object, Donation):

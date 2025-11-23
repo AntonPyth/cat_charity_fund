@@ -9,3 +9,4 @@ exclude =
    venv
    env
    alembic/versions/*.py
+   setup_for_postman.py
