@@ -26,10 +26,10 @@ class DonationsBase(Base):
 
 
 __table_args__ = (
-        CheckConstraint(
-            'full_amount > 0', name='итоговая сумма положительная ?'
-        ),
-        CheckConstraint(
-            'invested_amount >= 0', name='вложенная сумма положительная ?'
-        )
+    CheckConstraint(
+        'full_amount > 0', name='итоговая сумма положительная ?'
+    ),
+    CheckConstraint(
+        'invested_amount >= 0', name='вложенная сумма положительная ?'
+    )
 )
