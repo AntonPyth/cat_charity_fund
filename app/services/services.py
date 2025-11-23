@@ -1,9 +1,8 @@
 from datetime import datetime
+from typing import Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from typing import Union
 
 from app.models import CharityProject, Donation
 
@@ -50,7 +49,7 @@ async def investment_process(
     elif isinstance(model_object, Donation):
         free_objects_model = CharityProject
     else:
-        raise ValueError("Некорректный тип объекта модели")
+        raise ValueError('Некорректный тип объекта модели')
 
     result = await session.execute(
         select(free_objects_model)

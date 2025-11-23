@@ -14,13 +14,8 @@ class CRUDCharityProject(CRUDBase):
             name: str,
             session: AsyncSession,
     ) -> Optional[int]:
-        db_project_id = await session.execute(
-            select(CharityProject.id).where(
-                CharityProject.name == name
-            )
-        )
-        db_project_id = db_project_id.scalars().first()
-        return db_project_id
+        project = await self.get_by_attribute('name', name, session)
+        return project.id if project else None
 
 
 charity_project_crud = CRUDCharityProject(CharityProject)
