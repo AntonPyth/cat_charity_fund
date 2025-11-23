@@ -13,9 +13,8 @@ async def check_project_name_duplicate(
     session: AsyncSession
 ) -> None:
     """
-    Проверка на дублирование имени благотворительного проекта.
+    Если создан проект с дублирующим именем, вызывает сообщение об ошибке.
     """
-
     project_id = await charity_project_crud.get_project_id_by_name(
         name, session
     )
@@ -31,7 +30,7 @@ async def check_project_exists(
     session: AsyncSession
 ) -> CharityProject:
     """
-    Проверка существования благотворительного проекта.
+    Благотворительный проект уже создан ?.
     """
     project = await charity_project_crud.get(project_id, session)
     if project is None:
@@ -47,7 +46,7 @@ async def check_project_closed_or_invested(
     session: AsyncSession
 ) -> None:
     """
-    Проверка, не закрыт ли проект и не получены ли уже инвестиции.
+    Проект закрыт или инвестиции уже накоплены ?
     """
     project = await charity_project_crud.get(project_id, session)
     if not project:
@@ -71,7 +70,7 @@ async def check_project_before_edit(
     session: AsyncSession
 ) -> None:
     """
-    Проверка возможности редактирования проекта.
+    Можно ли вносить изменения в проект ?
     """
     project = await charity_project_crud.get(project_id, session)
     if not project:
