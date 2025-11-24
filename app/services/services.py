@@ -26,7 +26,6 @@ async def closing_single_investment(
     investment.invested_amount = investment.full_amount
     investment.fully_invested = True
     investment.close_date = datetime.now()
-    session.refresh(investment)
 
 
 async def investment_process(
@@ -34,12 +33,12 @@ async def investment_process(
     session: AsyncSession
 ):
     """Распределяет инвестиции между проектами."""
-    if isinstance(model_object, CharityProject):
-        free_objects_model = Donation
-    elif isinstance(model_object, Donation):
-        free_objects_model = CharityProject
-    else:
-        raise ValueError('Некорректный тип объекта модели')
+    try:
+        free_objects_model = model_object.investment_counterpart
+    except AttributeError:
+        raise ValueError(
+            'Не содержит противоположную модель и не поддерживает инвестиции.'
+        )
 
     result = await session.execute(
         select(free_objects_model)
@@ -74,4 +73,9 @@ async def investment_process(
 
     await session.commit()
     await session.refresh(model_object)
+    
+    # Закрыть проект если он полностью инвестирован
+    if isinstance(model_object, CharityProject):
+        await closing_project(model_object, session)
+    
     return model_object
