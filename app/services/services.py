@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import CharityProject, Donation
+from app.models.donation_base import DonationsBase
 
 
 async def closing_project(project: CharityProject, session: AsyncSession):
@@ -18,7 +19,8 @@ async def closing_project(project: CharityProject, session: AsyncSession):
 
 
 async def closing_single_investment(
-    investment: Union[CharityProject, Donation], session: AsyncSession
+    investment: DonationsBase,
+    session: AsyncSession
 ):
     """Помечает взнос как полностью инвестированный."""
     investment.invested_amount = investment.full_amount
@@ -27,7 +29,10 @@ async def closing_single_investment(
     session.refresh(investment)
 
 
-async def investment_process(model_object, session: AsyncSession):
+async def investment_process(
+    model_object: Union[CharityProject, Donation],
+    session: AsyncSession
+):
     """Распределяет инвестиции между проектами."""
     if isinstance(model_object, CharityProject):
         free_objects_model = Donation
